@@ -17,7 +17,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"), 1280, 720); // change reso of scene
+        scene = new Scene(loadFXML("primary"), 960, 720); // change reso of scene to qHD
         stage.setScene(scene);
         stage.show();
     }
