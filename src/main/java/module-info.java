@@ -1,4 +1,5 @@
 module org.astropanty {
+    requires transitive javafx.graphics;
     requires javafx.controls;
     requires javafx.fxml;
 
