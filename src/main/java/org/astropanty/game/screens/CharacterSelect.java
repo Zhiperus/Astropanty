@@ -1,10 +1,9 @@
 package org.astropanty.game.screens;
 
-import org.astropanty.App;
+import org.astropanty.components.Button;
 import org.astropanty.navigation.Screen;
 
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -20,20 +19,15 @@ public class CharacterSelect implements Screen {
     @Override
     public Scene content() {
         Text title = new Text("Select your ship");
-        title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-alignment: center;");
+        title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-alignment: center; -fx-fill: white;");
 
-        Button backButton = new Button("Back to Menu");
-        backButton.setStyle("-fx-font-size: 18px;");
-        backButton.setOnAction(event -> navigateToMenu.run());
-
-        Button startButton = new Button("Start");
-        startButton.setStyle("-fx-font-size: 18px;");
-        startButton.setOnAction(event -> startGame.run());
+        Button backButton = new Button("Back to Menu", navigateToMenu);
+        Button startButton = new Button("Start", startGame);
 
         VBox layout = new VBox(20, title, startButton, backButton);
         layout.setStyle("-fx-alignment: center; -fx-padding: 50;");
 
-        return new Scene(layout, App.WIDTH, App.HEIGHT);
+        return getBackgroundWithContent(layout);
     }
 
 }

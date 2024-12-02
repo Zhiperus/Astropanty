@@ -1,11 +1,12 @@
 package org.astropanty.game.screens;
 
+import org.astropanty.game.logic.GameTimer;
+import org.astropanty.navigation.Screen;
+
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import org.astropanty.game.logic.GameTimer;
-import org.astropanty.navigation.Screen;
 
 public class GameProper implements Screen{
     private Scene scene;
