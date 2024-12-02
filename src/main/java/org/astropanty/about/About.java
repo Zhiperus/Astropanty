@@ -20,17 +20,17 @@ public class About implements Screen {
         Text title = new Text("Game Instructions");
         title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-alignment: center;");
 
-        Text movementInstructions = new Text("Use W, A, S, D to move");
+        Text movementInstructions = new Text("Use W, S, D or Up, Left, Right to move");
         movementInstructions.setStyle("-fx-font-size: 18px;");
 
-        Text fireInstructions = new Text("Press 'P' to fire");
+        Text fireInstructions = new Text("Press 'Space' or 'Enter' to fire");
         fireInstructions.setStyle("-fx-font-size: 18px;");
 
-        Text mouseInstructions = new Text("Use the mouse to aim");
+        Text mouseInstructions = new Text("Rotate to aim");
         mouseInstructions.setStyle("-fx-font-size: 18px;");
 
         Button backButton = new Button("Back to Menu");
-        backButton.setStyle("-fx-font-size: 18px;");
+        backButton.setStyle("-fx-font-size: 18px;");    
         backButton.setOnAction(event -> navigateToMenu.run());
 
         VBox layout = new VBox(20, title, movementInstructions, mouseInstructions, fireInstructions, backButton);
