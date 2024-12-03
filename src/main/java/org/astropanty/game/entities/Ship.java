@@ -95,8 +95,4 @@ public class Ship extends Sprite implements Runnable {
 				this.setYPos(GameProper.WINDOW_HEIGHT);
 		}
 	}
-
-	/**********************************************************************************************
-	* Generates a random value to move the kart forward by a small step.
-	***********************************************************************************************/
 }

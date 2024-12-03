@@ -1,47 +1,42 @@
 package org.astropanty.game.logic;
 
-import javafx.animation.AnimationTimer;  // For handling the main game loop
+import javafx.animation.AnimationTimer; 
 import javafx.scene.Scene;
-import javafx.scene.canvas.GraphicsContext; // For rendering the game graphics
-import javafx.scene.image.Image;        // For handling images of the Ships and pedestrians
+import javafx.scene.canvas.GraphicsContext; 
+import javafx.scene.image.Image;       
 import javafx.scene.input.KeyCode;
-import javafx.scene.paint.Color;        // For setting the colors for the game elements
+import javafx.scene.paint.Color;        
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashSet;
 import java.util.Set;
-
 import org.astropanty.game.entities.Projectile;
 import org.astropanty.game.entities.Ship;
 import org.astropanty.game.screens.GameProper;
 
 public class GameTimer extends AnimationTimer {
-    private GraphicsContext gc;             // GraphicsContext for rendering game elements
+    private GraphicsContext gc;            
     private Scene scene;
-    private Ship myShip, yourShip;          // Two Ship objects representing the players
+    private Ship myShip, yourShip;         
     private Thread myShipThread, yourShipThread;
     private Set<KeyCode> activeKeys = new HashSet<>();
 
-    // Constructor initializing Ships, pedestrians, and threads
     public GameTimer(GraphicsContext gc, Scene scene, GameProper game) {
-        this.gc = gc; // Initialize GraphicsContext
+        this.gc = gc; 
         this.scene = scene;
 
-        // Create Ship and pedestrian objects with initial positions and images
         this.myShip = new Ship(10, 300, "myShip", new Image(getClass().getResource("/org/astropanty/yourShip.png").toExternalForm(), 40, 40, false, false));
         this.yourShip = new Ship(490, 300, "yourShip", new Image(getClass().getResource("/org/astropanty/myShip.png").toExternalForm(), 40, 40, false, false));
-        
-        // Create threads for each Ship and pedestrian (since Ships and pedestrians are runnable objects)
+
         this.myShipThread = new Thread(myShip);
         this.yourShipThread = new Thread(yourShip);
   
         this.handleKeyPressEvent();
     }
 
-    // Starts the race by initializing the start time and starting the threads for all participants
     public void startRace() {
-        this.myShipThread.start();         // Start myShip thread
-        this.yourShipThread.start();       // Start yourShip thread
+        this.myShipThread.start();         
+        this.yourShipThread.start();      
     }
 
     private void handleKeyPressEvent() {
@@ -71,8 +66,8 @@ public class GameTimer extends AnimationTimer {
     }  
     
     private void shoot(Ship yourShip, Ship enemyShip, KeyCode space) {
-        long currentTime = System.nanoTime(); // Current time in nanoseconds
-        long cooldownPeriod = 100_000_000L; // 2 seconds in nanoseconds
+        long currentTime = System.nanoTime();
+        long cooldownPeriod = 100_000_000L; 
         long reloadPeriod = 3_000_000_000L;
        
         List<Projectile> projectiles = yourShip.getBullets(); 
@@ -112,11 +107,8 @@ public class GameTimer extends AnimationTimer {
         }
     }
 
-
-    // Main game loop method, called by AnimationTimer every frame
     @Override
     public void handle(long currentNanoTime) {
-        // Clear the canvas for the new frame
         gc.clearRect(0, 0, GameProper.WINDOW_WIDTH, GameProper.WINDOW_HEIGHT);
         
         gc.strokeRect(5, 0, 100, 32);
@@ -131,7 +123,7 @@ public class GameTimer extends AnimationTimer {
         moveSprite(yourShip, KeyCode.W,  KeyCode.A, KeyCode.D);
         shoot(yourShip, myShip, KeyCode.SPACE);
  
-        this.myShip.render(gc); // Render myShip
-        this.yourShip.render(gc); // Render yourShip
+        this.myShip.render(gc); 
+        this.yourShip.render(gc); 
     }
 }
