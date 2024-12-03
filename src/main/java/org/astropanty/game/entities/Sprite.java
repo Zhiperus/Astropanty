@@ -47,6 +47,14 @@ public class Sprite {
 		return this.img;
 	}
 
+	public double getWidth(){
+		return this.width;
+	}
+
+	public double getHeight(){
+		return this.height;
+	}
+
 	public double getXPos() {
 		return this.xPos;
 	}

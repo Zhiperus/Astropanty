@@ -1,5 +1,6 @@
 package org.astropanty.game.screens;
 
+import org.astropanty.App;
 import org.astropanty.game.logic.GameTimer;
 import org.astropanty.navigation.Screen;
 
@@ -13,14 +14,14 @@ public class GameProper implements Screen{
     private Group root;
 	private Canvas canvas;
 
-    public final static int WINDOW_WIDTH = 568;
-	public final static int WINDOW_HEIGHT = 568;
+    public final static int WINDOW_WIDTH = App.WIDTH;
+	public final static int WINDOW_HEIGHT = App.HEIGHT;
 
     @Override
     public Scene content() {
         this.root = new Group();
-		this.scene = new Scene( root );
-		this.canvas = new Canvas( GameProper.WINDOW_WIDTH, GameProper.WINDOW_HEIGHT );
+		this.scene = getBackgroundWithContent(root); // add starry star background to GameProper
+        this.canvas = new Canvas( App.WIDTH, App.HEIGHT );
         this.root.getChildren().add( this.canvas );
 
         GraphicsContext gc = this.canvas.getGraphicsContext2D();

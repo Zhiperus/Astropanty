@@ -20,10 +20,10 @@ public class Credits implements Screen {
         title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-alignment: center; -fx-fill: white;");
 
         Text creditsText = new Text(
-                "Game Design: Mga Kupal\n" +
+                "Game Design: Placeholder\n" +
                         "Programming: Iorie Alen Chua\n\t\t\t\tEunel Jacob Joyosa\n\t\t\t\tRoberto Neil Santos\n" +
                         "Art and Graphics: Eunel Jacob Joyosa\n" +
-                        "Music and Sound Effects: Mga Kupal\n\n" +
+                        "Inspired by: Astro Duel Franchise\n\n" +
                         "Thank you for playing our game!");
         creditsText.setStyle("-fx-font-size: 16px; -fx-text-alignment: center; -fx-fill: white;");
 
