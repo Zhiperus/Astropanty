@@ -15,6 +15,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 public class GameTimer extends AnimationTimer {
     private final GraphicsContext gc; // GraphicsContext for rendering game elements
@@ -30,14 +31,13 @@ public class GameTimer extends AnimationTimer {
         this.gc = gc; // Initialize GraphicsContext
         this.scene = scene;
 
-        // Create Ship and pedestrian objects with initial positions and images
-        this.myShip = new Ship(10, 300, "myShip", new Image(
-                getClass().getResource("/org/astropanty/yourShip.png").toExternalForm(), 40, 40, false, false));
-        this.yourShip = new Ship(490, 300, "yourShip",
-                new Image(getClass().getResource("/org/astropanty/myShip.png").toExternalForm(), 40, 40, false, false));
+        // Create Ship objects with initial positions and images
+        this.myShip = new Ship(50, (GameProper.WINDOW_HEIGHT / 2), "myShip", new Image(
+                getClass().getResource("/org/astropanty/yourShip.png").toExternalForm(), 33, 42, false, false)); // changed ship image size to match ship image ratio (33x42)
+        this.yourShip = new Ship(GameProper.WINDOW_WIDTH - 100, (GameProper.WINDOW_HEIGHT / 2), "yourShip",
+                new Image(getClass().getResource("/org/astropanty/myShip.png").toExternalForm(), 33, 42, false, false)); // changed ship image size to match ship image ratio (33x42)
 
-        // Create threads for each Ship and pedestrian (since Ships and pedestrians are
-        // runnable objects)
+        // Create threads for each Ship and pedestrian (since Ships are runnable)
         this.myShipThread = new Thread(myShip);
         this.yourShipThread = new Thread(yourShip);
 
@@ -92,7 +92,9 @@ public class GameTimer extends AnimationTimer {
 
         if (bulletsLeft == 0) {
             long reloadTimeLeft = ((reloadPeriod - (currentTime - lastShootTime)) / 1_000_000_000L) + 1;
-            gc.strokeText("Reloading in " + reloadTimeLeft, "yourShip".equals(yourShip.getShipName()) ? 50 : 450, 450);
+            gc.setFont(Font.font("Orbitron", 20));
+            gc.setStroke(Color.WHITE);
+            gc.strokeText("Reloading in " + reloadTimeLeft, "yourShip".equals(yourShip.getShipName()) ? GameProper.WINDOW_WIDTH - 180: 50, 450);
         }
 
         if (activeKeys.contains(space) && (currentTime - lastShootTime >= cooldownPeriod) && bulletsLeft != 0) {
@@ -124,20 +126,26 @@ public class GameTimer extends AnimationTimer {
     public void handle(long currentNanoTime) {
         // Clear the canvas for the new frame
         gc.clearRect(0, 0, GameProper.WINDOW_WIDTH, GameProper.WINDOW_HEIGHT);
+        
+        
+        moveSprite(myShip, KeyCode.W, KeyCode.A, KeyCode.D);
+        shoot(myShip, yourShip, KeyCode.SPACE);
 
-        gc.strokeRect(5, 0, 100, 32);
-        gc.setFill(Color.RED);
-        gc.fillRect(5, 1, myShip.getHealth(), 30);
-        moveSprite(myShip, KeyCode.UP, KeyCode.LEFT, KeyCode.RIGHT);
-        shoot(myShip, yourShip, KeyCode.ENTER);
-
-        gc.strokeRect(GameProper.WINDOW_WIDTH - 100, 0, 100, 32);
-        gc.setFill(Color.RED);
-        gc.fillRect(GameProper.WINDOW_WIDTH - 100 + (100 - yourShip.getHealth()), 1, yourShip.getHealth(), 30);
-        moveSprite(yourShip, KeyCode.W, KeyCode.A, KeyCode.D);
-        shoot(yourShip, myShip, KeyCode.SPACE);
+        
+        moveSprite(yourShip, KeyCode.UP, KeyCode.LEFT, KeyCode.RIGHT);
+        shoot(yourShip, myShip, KeyCode.ENTER);
 
         this.myShip.render(gc); // Render myShip
         this.yourShip.render(gc); // Render yourShip
+
+        gc.setStroke(Color.WHITE);
+        gc.strokeRect(20, 0, 100, 32);
+        gc.setFill(Color.RED);
+        gc.fillRect(20, 1, myShip.getHealth(), 30);
+
+        gc.setStroke(Color.WHITE);
+        gc.strokeRect(GameProper.WINDOW_WIDTH - 120, 0, 100, 32);
+        gc.setFill(Color.RED);
+        gc.fillRect(GameProper.WINDOW_WIDTH - 120 + (100 - yourShip.getHealth()), 1, yourShip.getHealth(), 30);
     }
 }
