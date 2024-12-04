@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.HashSet;
 import java.util.Set;
 import org.astropanty.game.entities.Projectile;
-import org.astropanty.game.entities.Ship;
+import org.astropanty.game.entities.Ship; // For setting the colors for the game elements
 import org.astropanty.game.screens.GameProper;
 
 public class GameTimer extends AnimationTimer {
@@ -30,7 +30,7 @@ public class GameTimer extends AnimationTimer {
 
         this.myShipThread = new Thread(myShip);
         this.yourShipThread = new Thread(yourShip);
-  
+
         this.handleKeyPressEvent();
     }
 
@@ -43,46 +43,46 @@ public class GameTimer extends AnimationTimer {
         scene.setOnKeyPressed(e -> {
             activeKeys.add(e.getCode());
             System.out.println("Key pressed: " + e.getCode());
-            System.out.println("Active Keys: " + activeKeys);  // Print active keys set
+            System.out.println("Active Keys: " + activeKeys); // Print active keys set
         });
-        
+
         scene.setOnKeyReleased(e -> {
             activeKeys.remove(e.getCode());
             System.out.println("Key released: " + e.getCode());
-            System.out.println("Active Keys: " + activeKeys);  // Print active keys set
+            System.out.println("Active Keys: " + activeKeys); // Print active keys set
         });
     }
-    
+
     private void moveSprite(Ship ship, KeyCode forward, KeyCode left, KeyCode right) {
         if (activeKeys.contains(forward)) {
-           ship.forward(); 
+            ship.forward();
         }
-        if (activeKeys.contains(right)){
-    	 	ship.rotateRight();
-    	}
-        if(activeKeys.contains(left)) {
-    		ship.rotateLeft();
-    	}
-    }  
-    
+        if (activeKeys.contains(right)) {
+            ship.rotateRight();
+        }
+        if (activeKeys.contains(left)) {
+            ship.rotateLeft();
+        }
+    }
+
     private void shoot(Ship yourShip, Ship enemyShip, KeyCode space) {
         long currentTime = System.nanoTime();
         long cooldownPeriod = 100_000_000L; 
         long reloadPeriod = 3_000_000_000L;
-       
-        List<Projectile> projectiles = yourShip.getBullets(); 
+
+        List<Projectile> projectiles = yourShip.getBullets();
         int bulletsLeft = yourShip.bulletsLeft;
         long lastShootTime = yourShip.lastShot;
-        
-        if(bulletsLeft == 0 && currentTime - lastShootTime >= reloadPeriod) {
-        	yourShip.bulletsLeft = 5;
+
+        if (bulletsLeft == 0 && currentTime - lastShootTime >= reloadPeriod) {
+            yourShip.bulletsLeft = 5;
         }
-        
-        if(bulletsLeft == 0) {
-        	long reloadTimeLeft = ((reloadPeriod - ( currentTime - lastShootTime ))  / 1_000_000_000L) + 1 ;
-        	gc.strokeText("Reloading in " + reloadTimeLeft, yourShip.getShipName() == "yourShip" ? 50 : 450 , 450);
+
+        if (bulletsLeft == 0) {
+            long reloadTimeLeft = ((reloadPeriod - (currentTime - lastShootTime)) / 1_000_000_000L) + 1;
+            gc.strokeText("Reloading in " + reloadTimeLeft, "yourShip".equals(yourShip.getShipName()) ? 50 : 450, 450);
         }
-        		
+
         if (activeKeys.contains(space) && (currentTime - lastShootTime >= cooldownPeriod) && bulletsLeft != 0) {
             yourShip.shoot();
             yourShip.bulletsLeft--;
@@ -94,11 +94,11 @@ public class GameTimer extends AnimationTimer {
             Projectile projectile = iterator.next();
 
             projectile.render(gc);
-            
-            if(projectile.hitbox.intersects(enemyShip.hitbox)) {
-            	System.out.println("Hit" + yourShip.getShipName() + "by a" + projectile.getName());
-            	enemyShip.minusHealth(5);
-            	projectile.stop();
+
+            if (projectile.hitbox.intersects(enemyShip.hitbox)) {
+                System.out.println("Hit" + yourShip.getShipName() + "by a" + projectile.getName());
+                enemyShip.minusHealth(5);
+                projectile.stop();
             }
 
             if (!projectile.isPlaying()) {
@@ -110,17 +110,17 @@ public class GameTimer extends AnimationTimer {
     @Override
     public void handle(long currentNanoTime) {
         gc.clearRect(0, 0, GameProper.WINDOW_WIDTH, GameProper.WINDOW_HEIGHT);
-        
+
         gc.strokeRect(5, 0, 100, 32);
         gc.setFill(Color.RED);
         gc.fillRect(5, 1, myShip.getHealth(), 30);
         moveSprite(myShip, KeyCode.UP, KeyCode.LEFT, KeyCode.RIGHT);
         shoot(myShip, yourShip, KeyCode.ENTER);
-        
+
         gc.strokeRect(GameProper.WINDOW_WIDTH - 100, 0, 100, 32);
         gc.setFill(Color.RED);
         gc.fillRect(GameProper.WINDOW_WIDTH - 100 + (100 - yourShip.getHealth()), 1, yourShip.getHealth(), 30);
-        moveSprite(yourShip, KeyCode.W,  KeyCode.A, KeyCode.D);
+        moveSprite(yourShip, KeyCode.W, KeyCode.A, KeyCode.D);
         shoot(yourShip, myShip, KeyCode.SPACE);
  
         this.myShip.render(gc); 
