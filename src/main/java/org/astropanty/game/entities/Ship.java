@@ -93,7 +93,7 @@ public class Ship extends Sprite implements Runnable {
 			if (this.xPos > GameProper.WINDOW_WIDTH)
 				this.setXPos(0);
 			else if (this.xPos < -50)
-				this.setXPos(GameProper.WINDOW_HEIGHT);
+				this.setXPos(GameProper.WINDOW_WIDTH);
 			else if (this.yPos > GameProper.WINDOW_HEIGHT)
 				this.setYPos(0);
 			else if (this.yPos < -50)
