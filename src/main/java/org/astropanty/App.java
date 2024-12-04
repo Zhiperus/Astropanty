@@ -2,12 +2,10 @@ package org.astropanty;
 
 import java.io.IOException;
 
-import org.astropanty.about.About;
-import org.astropanty.credits.Credits;
-import org.astropanty.game.Game;
-import org.astropanty.menu.Menu;
-import org.astropanty.navigation.Screen;
-import org.astropanty.navigation.ScreenController;
+import org.astropanty.ui.game.Game;
+import org.astropanty.ui.home.Home;
+import org.astropanty.ui.navigation.Screen;
+import org.astropanty.ui.navigation.ScreenController;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -18,25 +16,18 @@ public class App extends Application {
 
     private ScreenController screenController;
 
-    private Screen aboutScreen;
-    private Screen creditsScreen;
-    private Screen menuScreen;
+    private Screen homeScreen;
     private Screen gameScreen;
 
     @Override
     public void start(Stage stage) throws IOException {
         screenController = new ScreenController(stage);
 
-        menuScreen = new Menu(
-                () -> screenController.navigate(gameScreen),
-                () -> screenController.navigate(aboutScreen),
-                () -> screenController.navigate(creditsScreen));
-        aboutScreen = new About(() -> screenController.navigate(menuScreen));
-        creditsScreen = new Credits(() -> screenController.navigate(menuScreen));
-        gameScreen = new Game(() -> screenController.navigate(menuScreen), screenController);
+        homeScreen = new Home(() -> screenController.navigate(gameScreen), screenController);
+        gameScreen = new Game(() -> screenController.navigate(homeScreen), screenController);
 
         stage.setTitle("Astropanty");
-        screenController.navigate(menuScreen);
+        screenController.navigate(homeScreen);
     }
 
     public static void main(String[] args) {
