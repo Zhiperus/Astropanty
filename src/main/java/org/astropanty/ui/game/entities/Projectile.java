@@ -5,63 +5,112 @@ import org.astropanty.ui.game.screens.GameProper;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 
+/**
+ * Represents a projectile in the game.
+ * A projectile moves in a specified direction and checks for off-screen or collision events.
+ */
 public class Projectile extends Sprite implements Runnable {
-	private final String projectileName;
-	private boolean playing;
-	public Rectangle2D hitbox;
+    private final String projectileName; // Name of the projectile (e.g., for identification)
+    private boolean playing;             // Indicates if the projectile is still active
+    public Rectangle2D hitbox;           // Represents the projectile's hitbox for collision detection
 
-	private final int PROJECTILE_SPEED = 8;
+    private final int PROJECTILE_SPEED = 8; // Speed at which the projectile moves
 
-	public Projectile(String name, double x, double y, double rotation, Image BULLET_IMAGE) {
-		super(x, y, BULLET_IMAGE);
-		this.projectileName = name;
-		this.playing = true;
-		this.rotation = rotation;
-		this.hitbox = new Rectangle2D(this.xPos, this.yPos, this.width, this.height);
-	}
+    /**
+     * Constructor to initialize the projectile with its attributes.
+     * 
+     * @param name             The name of the projectile
+     * @param x                The initial x-coordinate
+     * @param y                The initial y-coordinate
+     * @param rotation         The initial rotation angle (in degrees)
+     * @param PROJECTILE_IMAGE The image representing the projectile
+     */
+    public Projectile(String name, double x, double y, double rotation, Image PROJECTILE_IMAGE) {
+        super(x, y, PROJECTILE_IMAGE); // Initialize the base Sprite class
+        this.projectileName = name;
+        this.playing = true;          // Mark the projectile as active initially
+        this.rotation = rotation;    // Set the initial rotation
+        this.hitbox = new Rectangle2D(this.xPos, this.yPos, this.width, this.height); // Initialize the hitbox
+    }
 
-	public String getName() {
-		return this.projectileName;
-	}
+    /**
+     * Returns the name of the projectile.
+     * 
+     * @return The projectile's name
+     */
+    public String getName() {
+        return this.projectileName;
+    }
 
-	public void stop() {
-		this.playing = false;
-	}
+    /**
+     * Marks the projectile as inactive, stopping its movement and logic.
+     */
+    public void stop() {
+        this.playing = false;
+    }
 
-	@Override
-	public void run() {
-		this.race();
-	}
+    /**
+     * Checks if the projectile is still active.
+     * 
+     * @return true if active, false otherwise
+     */
+    public boolean isPlaying() {
+        return this.playing;
+    }
 
-	public boolean isPlaying() {
-		return this.playing;
-	}
+    /**
+     * Determines if the projectile has moved off the screen.
+     * 
+     * @return true if the projectile is off-screen, false otherwise
+     */
+    private boolean isOffScreen() {
+        return this.xPos < 0 || this.xPos > GameProper.WINDOW_WIDTH ||
+               this.yPos < 0 || this.yPos > GameProper.WINDOW_HEIGHT;
+    }
 
-	private boolean isOffScreen() {
-		return this.xPos < 0 || this.xPos > GameProper.WINDOW_WIDTH ||
-				this.yPos < 0 || this.yPos > GameProper.WINDOW_HEIGHT;
-	}
+    /**
+     * Moves the projectile in the direction of its rotation.
+     * The movement is based on trigonometric calculations for the x and y axes.
+     */
+    public void move() {
+        this.setXPos(this.getXPos() + Math.sin(Math.toRadians(this.getRotation())) * PROJECTILE_SPEED);
+        this.setYPos(this.getYPos() - Math.cos(Math.toRadians(this.getRotation())) * PROJECTILE_SPEED);
+    }
 
-	public void race() {
-		while (playing) {
-			move();
-			this.hitbox = new Rectangle2D(this.xPos, this.yPos, this.width, this.height);
+    /**
+     * Starts the projectile's movement logic in a separate thread.
+     */
+    @Override
+    public void run() {
+        this.race(); // Execute the race logic for movement
+    }
 
-			if (isOffScreen()) {
-				stop();
-			}
+    /**
+     * Handles the continuous movement of the projectile.
+     * The projectile updates its position and hitbox on each iteration.
+     * It stops if it moves off the screen or is explicitly stopped.
+     */
+    public void race() {
+        while (playing) {
+            // Move the projectile
+            move();
 
-			try {
-				Thread.sleep(16);
-			} catch (InterruptedException e) {
-				stop();
-				break;
-			}
-		}
-	}
+            // Update the hitbox position to reflect the current coordinates
+            this.hitbox = new Rectangle2D(this.xPos, this.yPos, this.width, this.height);
 
-	public void move() {
-		this.setXPos(this.getXPos() + Math.sin(Math.toRadians(this.getRotation())) * PROJECTILE_SPEED);
-		this.setYPos(this.getYPos() - Math.cos(Math.toRadians(this.getRotation())) * PROJECTILE_SPEED);
-	}
+            // Stop the projectile if it moves off-screen
+            if (isOffScreen()) {
+                stop();
+            }
+
+            // Pause the thread to control the projectile's frame rate
+            try {
+                Thread.sleep(16); // ~60 frames per second
+            } catch (InterruptedException e) {
+                // Stop the projectile if the thread is interrupted
+                stop();
+                break;
+            }
+        }
+    }
 }

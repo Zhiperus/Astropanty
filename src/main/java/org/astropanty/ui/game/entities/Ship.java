@@ -8,96 +8,157 @@ import org.astropanty.ui.game.screens.GameProper;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 
+/**
+ * Represents a player's ship in the game.
+ * Handles movement, shooting, and collision-related logic.
+ */
 public class Ship extends Sprite implements Runnable {
-	private final String name;
-	private boolean playing;
-	private int health;
-	private final List<Projectile> projectiles;
-	private final Image bulletImage;
+    private final String name;                 // Name of the ship (e.g., player identifier)
+    private boolean playing;                   // Indicates if the ship is active
+    private int health;                        // Health points of the ship
+    private final List<Projectile> projectiles; // List of active projectiles fired by the ship
+    private final Image bulletImage;           // Image used for the ship's projectiles
 
-	public int bulletsLeft;
-	public long lastShot;
-	public Rectangle2D hitbox;
+    public int bulletsLeft; // Number of bullets left before a reload is required
+    public long lastShot;   // Timestamp of the last shot fired
+    public Rectangle2D hitbox; // Ship's hitbox for collision detection
 
-	private final int MOVEMENT_SPEED = 3;
-	private final int ROTATION_SPEED = 3;
+    private final int MOVEMENT_SPEED = 3; // Speed of the ship's forward movement
+    private final int ROTATION_SPEED = 3; // Speed of the ship's rotation
 
-	public Ship(int x, int y, String name, Image SHIP_IMAGE) {
-		super(x, y, SHIP_IMAGE);
-		this.playing = true;
-		this.name = name;
-		this.health = 100;
-		this.projectiles = new ArrayList<>();
-		this.bulletImage = new Image(getClass().getResource("/org/astropanty/bullet.png").toExternalForm(), 10, 10,
-				false, false);
-		this.bulletsLeft = 5;
-		this.lastShot = 0;
-		this.hitbox = new Rectangle2D(this.xPos, this.yPos, this.width, this.height);
-	}
+    /**
+     * Constructs a new ship with initial position, name, and sprite image.
+     * 
+     * @param x         Initial x-coordinate of the ship
+     * @param y         Initial y-coordinate of the ship
+     * @param name      Name of the ship (e.g., "Player1")
+     * @param SHIP_IMAGE Image representing the ship
+     */
+    public Ship(int x, int y, String name, Image SHIP_IMAGE) {
+        super(x, y, SHIP_IMAGE);
+        this.playing = true; // Set the ship as active
+        this.name = name;
+        this.health = 100; // Default health value
+        this.projectiles = new ArrayList<>(); // Initialize projectile list
+        this.bulletImage = new Image(
+                getClass().getResource("/org/astropanty/bullet.png").toExternalForm(),
+                10, 10, false, false); // Load the projectile image
+        this.bulletsLeft = 5; // Initial bullets
+        this.lastShot = 0; // Initialize last shot timestamp
+        this.hitbox = new Rectangle2D(this.xPos, this.yPos, this.width, this.height); // Initialize hitbox
+    }
 
-	public void shoot() {
-		Projectile bullet = new Projectile(
-				"Bullet",
-				this.xPos + 13,
-				this.yPos + 13,
-				this.rotation,
-				this.bulletImage);
-		projectiles.add(bullet);
+    /**
+     * Fires a projectile from the ship.
+     * Creates a new projectile and starts its logic in a separate thread.
+     */
+    public void shoot() {
+        Projectile bullet = new Projectile(
+                "Bullet",
+                this.xPos + 13, // Offset to position the bullet correctly
+                this.yPos + 13,
+                this.rotation,
+                this.bulletImage);
+        projectiles.add(bullet); // Add the bullet to the active projectiles list
 
-		Thread bulletThread = new Thread(bullet);
-		bulletThread.start();
-	}
+        // Start the projectile's logic in a separate thread
+        Thread bulletThread = new Thread(bullet);
+        bulletThread.start();
+    }
 
-	public List<Projectile> getBullets() {
-		return projectiles;
-	}
+    /**
+     * Returns the list of active projectiles fired by the ship.
+     * 
+     * @return List of active projectiles
+     */
+    public List<Projectile> getBullets() {
+        return projectiles;
+    }
 
-	public String getShipName() {
-		return this.name;
-	}
+    /**
+     * Gets the name of the ship.
+     * 
+     * @return Ship name
+     */
+    public String getShipName() {
+        return this.name;
+    }
 
-	public int getHealth() {
-		return this.health;
-	}
+    /**
+     * Gets the current health of the ship.
+     * 
+     * @return Health value
+     */
+    public int getHealth() {
+        return this.health;
+    }
 
-	public void minusHealth(int damage) {
-		this.health -= damage;
-	}
+    /**
+     * Reduces the ship's health by the specified damage amount.
+     * 
+     * @param damage Amount of damage to subtract from the ship's health
+     */
+    public void minusHealth(int damage) {
+        this.health -= damage;
+    }
 
-	public void stop() {
-		this.playing = false;
-	}
+    /**
+     * Stops the ship, marking it as inactive.
+     */
+    public void stop() {
+        this.playing = false;
+    }
 
-	public void rotateRight() {
-		this.rotation = (this.rotation + ROTATION_SPEED) % 360;
-	}
+    /**
+     * Rotates the ship to the right based on the defined rotation speed.
+     */
+    public void rotateRight() {
+        this.rotation = (this.rotation + ROTATION_SPEED) % 360;
+    }
 
-	public void rotateLeft() {
-		this.rotation = (this.rotation - ROTATION_SPEED + 360) % 360;
-	}
+    /**
+     * Rotates the ship to the left based on the defined rotation speed.
+     */
+    public void rotateLeft() {
+        this.rotation = (this.rotation - ROTATION_SPEED + 360) % 360;
+    }
 
-	public void forward() {
-		this.setXPos(this.getXPos() + Math.sin(Math.toRadians(this.getRotation())) * MOVEMENT_SPEED);
-		this.setYPos(this.getYPos() - Math.cos(Math.toRadians(this.getRotation())) * MOVEMENT_SPEED);
-	}
+    /**
+     * Moves the ship forward in the direction of its rotation.
+     * Uses trigonometric functions to calculate the new position.
+     */
+    public void forward() {
+        this.setXPos(this.getXPos() + Math.sin(Math.toRadians(this.getRotation())) * MOVEMENT_SPEED);
+        this.setYPos(this.getYPos() - Math.cos(Math.toRadians(this.getRotation())) * MOVEMENT_SPEED);
+    }
 
-	@Override
-	public void run() {
-		this.race();
-	}
+    /**
+     * Starts the ship's logic in a separate thread.
+     */
+    @Override
+    public void run() {
+        this.race();
+    }
 
-	private void race() {
-		while (playing) {
-			this.hitbox = new Rectangle2D(this.xPos, this.yPos, this.width, this.height);
+    /**
+     * Handles the ship's continuous logic, such as hitbox updates and screen wrapping.
+     * Ensures the ship remains within the game window by wrapping its position.
+     */
+    private void race() {
+        while (playing) {
+            // Update the hitbox position to match the current coordinates
+            this.hitbox = new Rectangle2D(this.xPos, this.yPos, this.width, this.height);
 
-			if (this.xPos > GameProper.WINDOW_WIDTH)
-				this.setXPos(0);
-			else if (this.xPos < -50)
-				this.setXPos(GameProper.WINDOW_WIDTH);
-			else if (this.yPos > GameProper.WINDOW_HEIGHT)
-				this.setYPos(0);
-			else if (this.yPos < -50)
-				this.setYPos(GameProper.WINDOW_HEIGHT);
-		}
-	}
+            // Implement screen wrapping logic
+            if (this.xPos > GameProper.WINDOW_WIDTH) {
+                this.setXPos(0); // Wrap to the left
+            } else if (this.xPos < -50) {
+                this.setXPos(GameProper.WINDOW_WIDTH); // Wrap to the right
+            } else if (this.yPos > GameProper.WINDOW_HEIGHT) {
+                this.setYPos(0); // Wrap to the top
+            } else if (this.yPos < -50) {
+                this.setYPos(GameProper.WINDOW_HEIGHT); // Wrap to the bottom
+            }
+        }
+    }
 }
