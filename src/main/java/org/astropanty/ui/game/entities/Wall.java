@@ -7,7 +7,7 @@ import javafx.scene.image.Image;
  * Represents wall entities in the game.
  * Wall entities block movement for ships and projectiles via collision detection.
  */
-public class Walls extends Sprite {
+public class Wall extends Sprite {
     private final String wallName; // Name of the wall entity
     public Rectangle2D hitbox;     // Represents the wall's hitbox for collision detection
 
@@ -19,7 +19,7 @@ public class Walls extends Sprite {
      * @param y          The y-coordinate position
      * @param wallImage  The image representing the wall
      */
-    public Walls(String name, double x, double y, Image wallImage) {
+    public Wall(String name, double x, double y, Image wallImage) {
         super(x, y, wallImage); // Call the Sprite class constructor
         this.wallName = name;
         updateHitbox(); // Initialize the hitbox

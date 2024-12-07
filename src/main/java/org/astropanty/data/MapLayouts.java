@@ -1,7 +1,7 @@
 package org.astropanty.data;
 
 import javafx.scene.image.Image;
-import org.astropanty.ui.game.entities.Walls;
+import org.astropanty.ui.game.entities.Wall;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +20,11 @@ public class MapLayouts {
     /**
      * Returns wall entities for Map 1 (just need a name for the map).
      */
-    public static List<Walls> getMap1Walls(){
-        List<Walls> walls = new ArrayList<>();
+    public static List<Wall> getMap1Wall(){
+        List<Wall> walls = new ArrayList<>();
        
-        walls.add(new Walls("longWall1", 100, 300, LONG_WALL_IMG));
-        walls.add(new Walls("cubeWall1", 400, 300, CUBE_WALL_IMG));
+        walls.add(new Wall("longWall1", 100, 300, LONG_WALL_IMG));
+        walls.add(new Wall("cubeWall1", 400, 300, CUBE_WALL_IMG));
 
         return walls;
     }
@@ -32,12 +32,12 @@ public class MapLayouts {
     /**
      * Returns wall entities for Map 2 (just need a name for the map).
      */
-    public static List<Walls> getMap2Walls(){
-        List<Walls> walls = new ArrayList<>();
+    public static List<Wall> getMap2Walls(){
+        List<Wall> walls = new ArrayList<>();
        
-        walls.add(new Walls("longWall2", 300, 300, LONG_WALL_IMG));
-        walls.add(new Walls("cubeWall2", 500, 700, CUBE_WALL_IMG));
-        walls.add(new Walls("rectWall2", 500, 700, RECT_WALL_IMG));
+        walls.add(new Wall("longWall2", 300, 300, LONG_WALL_IMG));
+        walls.add(new Wall("cubeWall2", 500, 700, CUBE_WALL_IMG));
+        walls.add(new Wall("rectWall2", 500, 700, RECT_WALL_IMG));
 
         return walls;
     }

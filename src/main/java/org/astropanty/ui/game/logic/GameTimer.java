@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.astropanty.ui.game.entities.Projectile;
 import org.astropanty.ui.game.entities.Ship;
-import org.astropanty.ui.game.entities.Walls;
+import org.astropanty.ui.game.entities.Wall;
 import org.astropanty.ui.game.screens.GameProper;
 
 import javafx.animation.AnimationTimer;
@@ -29,13 +29,13 @@ public class GameTimer extends AnimationTimer {
     private final Ship player2Ship;  // Player 2's ship
     private final Thread player1Thread; // Thread for player 1's ship logic
     private final Thread player2Thread; // Thread for player 2's ship logic
-    private final List<Walls> walls; // list of wall entities for selected map
+    private final List<Wall> walls; // list of wall entities for selected map
     private final Set<KeyCode> activeKeys = new HashSet<>(); // Tracks currently pressed keys
 
     /**
      * Constructor for initializing the GameTimer with necessary dependencies.
      */
-    public GameTimer(GraphicsContext gc, Scene scene, Ship player1Ship, Ship player2Ship, List<Walls> walls) {
+    public GameTimer(GraphicsContext gc, Scene scene, Ship player1Ship, Ship player2Ship, List<Wall> walls) {
         this.gc = gc;
         this.scene = scene;
         this.player1Ship = player1Ship;
@@ -56,7 +56,7 @@ public class GameTimer extends AnimationTimer {
      * @param ship The ship to check.
      */
     private void checkShipCollision(Ship ship) {
-        for (Walls wall : walls) {
+        for (Wall wall : walls) {
             Rectangle2D shipBounds = new Rectangle2D(ship.getXPos(), ship.getYPos(), ship.getWidth(), ship.getHeight());
             if (wall.checkCollision(shipBounds)) {
                 System.out.println(ship.getShipName() + " collided with " + wall.getName());
@@ -71,7 +71,7 @@ public class GameTimer extends AnimationTimer {
      * @param ship The ship to adjust.
      * @param wall The wall it collided with.
      */
-    private void adjustShipPosition(Ship ship, Walls wall) {
+    private void adjustShipPosition(Ship ship, Wall wall) {
         Rectangle2D shipBounds = new Rectangle2D(ship.getXPos(), ship.getYPos(), ship.getWidth(), ship.getHeight());
         Rectangle2D wallBounds = wall.getBounds();
         if (shipBounds.intersects(wallBounds)) {
@@ -96,7 +96,7 @@ public class GameTimer extends AnimationTimer {
         Iterator<Projectile> iterator = shooter.getBullets().iterator();
         while (iterator.hasNext()){
             Projectile projectile = iterator.next();
-            for (Walls wall: walls){
+            for (Wall wall: walls){
                 if (wall.checkCollision(projectile.hitbox)){
                     System.out.println("Projectile hit " + wall.getName());
                     projectile.stop();
@@ -111,7 +111,7 @@ public class GameTimer extends AnimationTimer {
      * Render all walls.
      */
     private void renderWalls(){
-        for (Walls wall : walls){
+        for (Wall wall : walls){
             wall.render(gc);
         }
     }
