@@ -128,8 +128,10 @@ public class Ship extends Sprite implements Runnable {
      * Uses trigonometric functions to calculate the new position.
      */
     public void forward() {
-        this.setXPos(this.getXPos() + Math.sin(Math.toRadians(this.getRotation())) * MOVEMENT_SPEED);
-        this.setYPos(this.getYPos() - Math.cos(Math.toRadians(this.getRotation())) * MOVEMENT_SPEED);
+        if (playing){
+            this.setXPos(this.getXPos() + Math.sin(Math.toRadians(this.getRotation())) * MOVEMENT_SPEED);
+            this.setYPos(this.getYPos() - Math.cos(Math.toRadians(this.getRotation())) * MOVEMENT_SPEED);
+        }
     }
 
     /**
