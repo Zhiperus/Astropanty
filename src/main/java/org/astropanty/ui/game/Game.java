@@ -4,6 +4,7 @@ import org.astropanty.ui.game.screens.CharacterSelect;
 import org.astropanty.ui.game.screens.GameProper;
 import org.astropanty.ui.navigation.Screen;
 import org.astropanty.ui.navigation.ScreenController;
+import org.astropanty.ui.game.screens.MapSelectScreen;
 
 import javafx.scene.Scene;
 
@@ -21,7 +22,8 @@ public class Game implements Screen {
     @Override
     public Scene content() {
         characterSelectScreen = new CharacterSelect(navigateToMenu,
-                (selectedShipIds) -> screenController.navigate(new GameProper(selectedShipIds)));
+                (selectedShipIds) -> screenController.navigate(new MapSelectScreen(navigateToMenu, 
+                (mapId) -> screenController.navigate(new GameProper(selectedShipIds, mapId)))));
 
         // return character select as initial screen
         return characterSelectScreen.content();

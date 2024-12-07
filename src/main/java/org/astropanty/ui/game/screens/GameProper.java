@@ -1,10 +1,13 @@
 package org.astropanty.ui.game.screens;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.astropanty.App;
+import org.astropanty.data.MapLayouts;
 import org.astropanty.data.ShipImageRepository;
 import org.astropanty.ui.game.entities.Ship;
+import org.astropanty.ui.game.entities.Walls;
 import org.astropanty.ui.game.logic.GameTimer;
 import org.astropanty.ui.navigation.Screen;
 
@@ -22,13 +25,15 @@ public class GameProper implements Screen {
 
     private final int player1ShipId;
     private final int player2ShipId;
+    private final int mapId;
 
     public final static int WINDOW_WIDTH = App.WIDTH;
     public final static int WINDOW_HEIGHT = App.HEIGHT;
 
-    public GameProper(ArrayList<Integer> selectedShipIds) {
+    public GameProper(ArrayList<Integer> selectedShipIds, int mapId) {
         this.player1ShipId = selectedShipIds.get(0);
         this.player2ShipId = selectedShipIds.get(1);
+        this.mapId = mapId;
     }
 
     @Override
@@ -45,7 +50,9 @@ public class GameProper implements Screen {
         Ship player2Ship = new Ship(WINDOW_WIDTH - 100, WINDOW_HEIGHT / 2, "Player 2",
                 new Image(ShipImageRepository.getShipImagePath(player2ShipId), 33, 42, false, false));
 
-        GameTimer gameTimer = new GameTimer(gc, scene, player1Ship, player2Ship);
+        List<Walls> selectedMap = (mapId == 1) ? MapLayouts.getMap1Walls() : MapLayouts.getMap2Walls();
+
+        GameTimer gameTimer = new GameTimer(gc, scene, player1Ship, player2Ship,selectedMap);
         gameTimer.start();
         gameTimer.startRace();
 
