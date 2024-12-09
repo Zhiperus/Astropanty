@@ -151,6 +151,9 @@ public class Ship extends Sprite implements Runnable {
             // Update the hitbox position to match the current coordinates
             this.hitbox = new Rectangle2D(this.xPos, this.yPos, this.width, this.height);
 
+            if(this.health == 0)
+                stop();
+
             // Implement screen wrapping logic
             if (this.xPos > GameProper.WINDOW_WIDTH) {
                 this.setXPos(0); // Wrap to the left

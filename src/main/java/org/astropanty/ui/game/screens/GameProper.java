@@ -10,6 +10,7 @@ import org.astropanty.ui.game.entities.Ship;
 import org.astropanty.ui.game.entities.Wall;
 import org.astropanty.ui.game.logic.GameTimer;
 import org.astropanty.ui.navigation.Screen;
+import org.astropanty.ui.navigation.ScreenController;
 
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -30,10 +31,15 @@ public class GameProper implements Screen {
     public final static int WINDOW_WIDTH = App.WIDTH;
     public final static int WINDOW_HEIGHT = App.HEIGHT;
 
-    public GameProper(ArrayList<Integer> selectedShipIds, int mapId) {
+    private final ScreenController screenController;
+    private final Runnable navigateToMenu;
+
+    public GameProper(ArrayList<Integer> selectedShipIds, int mapId, Runnable navigateToMenu, ScreenController screenController) {
         this.player1ShipId = selectedShipIds.get(0);
         this.player2ShipId = selectedShipIds.get(1);
         this.mapId = mapId;
+        this.screenController = screenController;
+        this.navigateToMenu = navigateToMenu;
     }
 
     @Override
@@ -52,7 +58,7 @@ public class GameProper implements Screen {
 
         List<Wall> selectedMap = (mapId == 1) ? MapLayouts.getMap1Wall() : MapLayouts.getMap2Walls();
 
-        GameTimer gameTimer = new GameTimer(gc, scene, player1Ship, player2Ship,selectedMap);
+        GameTimer gameTimer = new GameTimer(gc, scene, player1Ship, player2Ship,selectedMap, navigateToMenu, screenController);
         gameTimer.start();
         gameTimer.startRace();
 

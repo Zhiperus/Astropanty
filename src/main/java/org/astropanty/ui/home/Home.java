@@ -26,7 +26,8 @@ public class Home implements Screen {
         menuScreen = new Menu(
                 navigateToGame,
                 () -> screenController.navigate(aboutScreen),
-                () -> screenController.navigate(creditsScreen));
+                () -> screenController.navigate(creditsScreen),
+                () -> System.exit(0));
         aboutScreen = new About(() -> screenController.navigate(menuScreen));
         creditsScreen = new Credits(() -> screenController.navigate(menuScreen));
 
