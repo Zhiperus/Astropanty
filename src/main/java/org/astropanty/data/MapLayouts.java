@@ -37,17 +37,11 @@ public class MapLayouts {
         int lWallHZWidth = (int) LONG_WALL_HZ_IMG.getWidth();
         int lWallHZHeight = (int) LONG_WALL_HZ_IMG.getHeight();
 
-        
-        int centerX = windowWidth / 2;
-        int centerY = windowHeight / 2;
-
         // border walls left side
         walls.add(new Wall("borderUpperLeft", 7 - LONG_WALL_IMG.getWidth(), -8, LONG_WALL_IMG));
         walls.add(new Wall("borderUpperLeftHZ", 60 - LONG_WALL_IMG.getWidth(), -53, LONG_WALL_HZ_IMG));
         walls.add(new Wall("borderLowerLeft", 7 - LONG_WALL_IMG.getWidth(), windowHeight - 180, LONG_WALL_IMG));
         walls.add(new Wall("borderLowerLeftHZ", 60 - LONG_WALL_IMG.getWidth(), windowHeight - 7, LONG_WALL_HZ_IMG));
-
-        
 
         // border walls right side
         walls.add(new Wall("borderUpperRight", windowWidth - 7, -8, LONG_WALL_IMG));
@@ -55,27 +49,13 @@ public class MapLayouts {
         walls.add(new Wall("borderLowerRight", windowWidth - 7, windowHeight - 180, LONG_WALL_IMG));
         walls.add(new Wall("borderLowerRightHZ", windowWidth - 180, windowHeight - 7, LONG_WALL_HZ_IMG));
 
-
-        // walls.add(new Wall("centerVert1", centerX, centerY, LONG_WALL_HZ_IMG));
-        // walls.add(new Wall("centerVert1", centerX - LONG_WALL_HZ_IMG.getWidth(), centerY, LONG_WALL_HZ_IMG));
-        // walls.add(new Wall("centerVert1", centerX - LONG_WALL_HZ_IMG.getWidth(), centerY - LONG_WALL_HZ_IMG.getHeight(), LONG_WALL_HZ_IMG));
-        // walls.add(new Wall("centerVert1", centerX, centerY - LONG_WALL_HZ_IMG.getHeight(), LONG_WALL_HZ_IMG));
-
-        walls.add(new Wall("centerVert1", (windowWidth - lWallHZWidth) / 2, (windowHeight - lWallHZHeight) / 2, LONG_WALL_HZ_IMG));
+        walls.add(new Wall("centerHZ1", (windowWidth - lWallHZWidth) / 2, (windowHeight - lWallHZHeight) / 2, LONG_WALL_HZ_IMG));
         walls.add(new Wall("centerVert1", (windowWidth - lWallWidth) / 2, (windowHeight - lWallHeight) / 2, LONG_WALL_IMG));
-        walls.add(new Wall("centerVert1", (windowWidth - lWallHZWidth) / 2, windowHeight - 7, LONG_WALL_HZ_IMG));
-        walls.add(new Wall("centerVert1", (windowWidth - lWallHZWidth) / 2, -53, LONG_WALL_HZ_IMG));
+        walls.add(new Wall("centerVertUpper", (windowWidth - lWallHZWidth) / 2, windowHeight - 7, LONG_WALL_HZ_IMG));
+        walls.add(new Wall("centerHZLower", (windowWidth - lWallHZWidth) / 2, -53, LONG_WALL_HZ_IMG));
 
         walls.add(new Wall("centerVert1", (windowWidth - CUBE_WALL_IMG.getWidth()) / 2, windowHeight - (3*CUBE_WALL_IMG.getHeight()), CUBE_WALL_IMG));
         walls.add(new Wall("centerVert1", (windowWidth - CUBE_WALL_IMG.getWidth()) / 2, CUBE_WALL_IMG.getHeight()*2, CUBE_WALL_IMG));
-
-
-        // wall.add(new Wall("borderLongHZ"))
-
-        //walls.add(new Wall("borderLongW2", 5, 50, LONG_WALL_IMG));
-
-        // walls.add(new Wall("longWall1", 100, 300, LONG_WALL_IMG));
-        // walls.add(new Wall("cubeWall1", 400, 300, CUBE_WALL_IMG));
 
         return walls;
     }
