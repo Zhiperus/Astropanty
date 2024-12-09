@@ -7,6 +7,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -20,12 +22,14 @@ public class WinningScreen implements Screen {
     private final String winner;
     private final Image ship1Image;
     private final Image ship2Image;
+    private final Scene scene;
 
-    public WinningScreen(Runnable navigateToMenu, String winner, Image ship1Image, Image ship2Image) {
+    public WinningScreen(Scene scene, Runnable navigateToMenu, String winner, Image ship1Image, Image ship2Image) {
         this.navigateToMenu = navigateToMenu;
         this.winner = winner;
         this.ship1Image = ship1Image;
         this.ship2Image = ship2Image;
+        this.scene = scene;
     }
 
     @Override
@@ -33,7 +37,7 @@ public class WinningScreen implements Screen {
         // Title text
         Text title = new Text(winner.equalsIgnoreCase("draw") ? "It's a Draw!" : "Winner!");
         title.setStyle("-fx-font-size: 36px; -fx-font-weight: bold; -fx-fill: white;");
-
+  
         // Winner or draw message
         Text winnerText = new Text(winner.equalsIgnoreCase("draw") ? "No winner this time!" : winner + " has won!");
         winnerText.setStyle("-fx-font-size: 24px; -fx-fill: white;");
@@ -62,6 +66,11 @@ public class WinningScreen implements Screen {
         mainLayout.setPadding(new Insets(20));
         mainLayout.setAlignment(Pos.CENTER);
 
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+        if (event.getCode() == KeyCode.ENTER || event.getCode() == KeyCode.SPACE) {
+                event.consume();
+            }
+        });
         // Return the scene with background
         return getBackgroundWithContent(mainLayout);
     }

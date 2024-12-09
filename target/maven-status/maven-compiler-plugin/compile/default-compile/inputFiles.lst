@@ -1,10 +1,11 @@
 c:\Users\Iorie\Desktop\Learning Programming\Projects\Astropanty\astropanty\src\main\java\org\astropanty\ui\home\menu\Menu.java
 c:\Users\Iorie\Desktop\Learning Programming\Projects\Astropanty\astropanty\src\main\java\org\astropanty\ui\game\screens\GameProper.java
-c:\Users\Iorie\Desktop\Learning Programming\Projects\Astropanty\astropanty\src\main\java\org\astropanty\data\ShipImageRepository.java
 c:\Users\Iorie\Desktop\Learning Programming\Projects\Astropanty\astropanty\src\main\java\org\astropanty\ui\game\entities\Projectile.java
 c:\Users\Iorie\Desktop\Learning Programming\Projects\Astropanty\astropanty\src\main\java\org\astropanty\ui\home\credits\Credits.java
 c:\Users\Iorie\Desktop\Learning Programming\Projects\Astropanty\astropanty\src\main\java\module-info.java
+c:\Users\Iorie\Desktop\Learning Programming\Projects\Astropanty\astropanty\src\main\java\org\astropanty\ui\game\logic\ActivePowerUp.java
 c:\Users\Iorie\Desktop\Learning Programming\Projects\Astropanty\astropanty\src\main\java\org\astropanty\ui\components\Button.java
+c:\Users\Iorie\Desktop\Learning Programming\Projects\Astropanty\astropanty\src\main\java\org\astropanty\ui\game\entities\PowerUp.java
 c:\Users\Iorie\Desktop\Learning Programming\Projects\Astropanty\astropanty\src\main\java\org\astropanty\ui\game\Game.java
 c:\Users\Iorie\Desktop\Learning Programming\Projects\Astropanty\astropanty\src\main\java\org\astropanty\ui\navigation\ScreenController.java
 c:\Users\Iorie\Desktop\Learning Programming\Projects\Astropanty\astropanty\src\main\java\org\astropanty\ui\game\entities\Wall.java
@@ -15,6 +16,7 @@ c:\Users\Iorie\Desktop\Learning Programming\Projects\Astropanty\astropanty\src\m
 c:\Users\Iorie\Desktop\Learning Programming\Projects\Astropanty\astropanty\src\main\java\org\astropanty\ui\game\entities\Sprite.java
 c:\Users\Iorie\Desktop\Learning Programming\Projects\Astropanty\astropanty\src\main\java\org\astropanty\ui\game\screens\WinningScreen.java
 c:\Users\Iorie\Desktop\Learning Programming\Projects\Astropanty\astropanty\src\main\java\org\astropanty\App.java
+c:\Users\Iorie\Desktop\Learning Programming\Projects\Astropanty\astropanty\src\main\java\org\astropanty\data\ShipRepository.java
 c:\Users\Iorie\Desktop\Learning Programming\Projects\Astropanty\astropanty\src\main\java\org\astropanty\ui\utils\ScreenUtils.java
 c:\Users\Iorie\Desktop\Learning Programming\Projects\Astropanty\astropanty\src\main\java\org\astropanty\ui\home\Home.java
 c:\Users\Iorie\Desktop\Learning Programming\Projects\Astropanty\astropanty\src\main\java\org\astropanty\ui\game\screens\CharacterSelect.java

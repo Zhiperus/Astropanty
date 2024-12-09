@@ -1,10 +1,14 @@
 package org.astropanty.ui.game.logic;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import org.astropanty.ui.game.entities.PowerUp;
 import org.astropanty.ui.game.entities.Projectile;
 import org.astropanty.ui.game.entities.Ship;
 import org.astropanty.ui.game.entities.Wall;
@@ -17,7 +21,9 @@ import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
@@ -33,8 +39,11 @@ public class GameTimer extends AnimationTimer {
     private final Thread player1Thread; // Thread for player 1's ship logic
     private final Thread player2Thread; // Thread for player 2's ship logic
     private final List<Wall> walls; // list of wall entities for selected map
+    private final List<PowerUp> powerUps = new ArrayList<>();
+    private final Map<Ship, List<ActivePowerUp>> activePowerUps = new HashMap<>();
     private final Set<KeyCode> activeKeys = new HashSet<>(); // Tracks currently pressed keys
     private final long startTime;
+    private long lastNanoTime;
 
     private final ScreenController screenController;
     private final Runnable navigateToMenu;
@@ -118,6 +127,19 @@ public class GameTimer extends AnimationTimer {
         }
     }
 
+    private void checkWallCollsions(){
+        Iterator<PowerUp> iterator = powerUps.iterator();
+        while (iterator.hasNext()){
+            PowerUp powerUp = iterator.next();
+            for (Wall wall: walls){
+                if (wall.checkCollision(powerUp.getHitbox())){
+                    iterator.remove();
+                    break;
+                }
+            }
+        }
+    }
+
     /**
      * Render all walls.
      */
@@ -127,6 +149,112 @@ public class GameTimer extends AnimationTimer {
         }
     }
 
+    private void spawnPowerUp() {
+        if (Math.random() < 0.005) { // 0.5% chance per frame
+             // Define buffer distance from edges (e.g., 50 pixels)
+            int buffer = 50;
+            
+            // Randomize the spawn position, making sure it's not too close to the borders
+            double x = buffer + Math.random() * (GameProper.WINDOW_WIDTH - 2 * buffer); // Ensure x is within the inner area
+            double y = buffer + Math.random() * (GameProper.WINDOW_HEIGHT - 2 * buffer); // Ensure y is within the inner area
+
+    
+            PowerUp.PowerUpType[] types = PowerUp.PowerUpType.values();
+            PowerUp.PowerUpType randomType = types[(int) (Math.random() * types.length)];
+    
+            Image icon;
+            switch (randomType) {
+                case SPEED:
+                    icon = new Image(getClass().getResource("/org/astropanty/speed_icon.png").toExternalForm(),50, 50, false ,false);
+                    break;
+                case DAMAGE:
+                    icon = new Image(getClass().getResource("/org/astropanty/damage_icon.png").toExternalForm(),50, 50, false ,false);
+                    break;
+                case HEALTH:
+                    icon = new Image(getClass().getResource("/org/astropanty/health_icon.png").toExternalForm(),50, 50, false ,false);
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + randomType);
+            }
+    
+            PowerUp powerUp = new PowerUp(randomType, x, y, icon); // 10 seconds duration
+            powerUps.add(powerUp);
+        }
+    }
+
+    private void checkPowerUpCollisions(Ship ship) {
+        Iterator<PowerUp> iterator = powerUps.iterator();
+        while (iterator.hasNext()) {
+            PowerUp powerUp = iterator.next();
+            powerUp.render(gc);
+
+            if (powerUp.isActive() && ship.hitbox.intersects(powerUp.getHitbox())) { // Match the size used in `draw()`
+                applyPowerUp(ship, powerUp);
+                iterator.remove(); // Remove collected power-up
+            }
+        }
+    }
+
+    private void applyPowerUp(Ship ship, PowerUp powerUp) {
+        powerUp.applyTo(ship); // Apply the immediate effect
+        activePowerUps.computeIfAbsent(ship, k -> new ArrayList<>())
+                      .add(new ActivePowerUp(powerUp.getType(), 3)); // 3 seconds duration
+    }
+
+    private void updatePowerUps(double deltaTime) {
+        Iterator<PowerUp> iterator = powerUps.iterator();
+        while (iterator.hasNext()) {
+            PowerUp powerUp = iterator.next();
+            powerUp.update(deltaTime); // Update the power-up's remaining time
+    
+            // Remove the power-up if it is no longer active
+            if (!powerUp.isActive()) {
+                iterator.remove();
+            }
+        }
+    }
+
+    private void updateActivePowerUps(double deltaTime) {
+        Iterator<Map.Entry<Ship, List<ActivePowerUp>>> shipIterator = activePowerUps.entrySet().iterator();
+    
+        while (shipIterator.hasNext()) {
+            Map.Entry<Ship, List<ActivePowerUp>> entry = shipIterator.next();
+            Ship ship = entry.getKey();
+            List<ActivePowerUp> powerUps = entry.getValue();
+    
+            Iterator<ActivePowerUp> powerUpIterator = powerUps.iterator();
+            while (powerUpIterator.hasNext()) {
+                ActivePowerUp activePowerUp = powerUpIterator.next();
+                activePowerUp.reduceTime(deltaTime);
+    
+                // If the power-up duration is over, reset the ship's stats
+                if (activePowerUp.getRemainingTime() <= 0) {
+                    resetPowerUpEffect(ship, activePowerUp.getType());
+                    powerUpIterator.remove();
+                }
+            }
+    
+            // Remove ship entry if no active power-ups remain
+            if (powerUps.isEmpty()) {
+                shipIterator.remove();
+            }
+        }
+    }
+
+    private void resetPowerUpEffect(Ship ship, PowerUp.PowerUpType type) {
+        switch (type) {
+            case SPEED:
+                ship.resetSpeed();
+                break;
+            case DAMAGE:
+                ship.resetDamage();
+                break;
+            case HEALTH:
+                // No reset needed; health boosts are permanent 
+                break;
+        }
+    }
+    
     /**
      * Starts the race by launching threads for player ship logic.
      */
@@ -202,7 +330,7 @@ public class GameTimer extends AnimationTimer {
             // Check for collision with the target ship
             if (projectile.hitbox.intersects(target.hitbox)) {
                 System.out.println("Hit " + target.getShipName() + " by " + projectile.getName());
-                target.minusHealth(5); // Reduce target's health
+                target.minusHealth(shooter.getBulletDamage()); // Reduce target's health
                 projectile.stop(); // Stop the projectile
             }
 
@@ -241,9 +369,9 @@ public class GameTimer extends AnimationTimer {
                 try {
                     Thread.sleep(2000); // Delay for displaying winner
                     if(!winner.equals("Draw!"))
-                        screenController.navigate(new WinningScreen(navigateToMenu, winner, player1Ship.getShipName() == winner ? player1Ship.getImage() : player2Ship.getImage(), null));
+                        screenController.navigate(new WinningScreen(scene, navigateToMenu, winner, player1Ship.getShipName() == winner ? player1Ship.getImage() : player2Ship.getImage(), null));
                     else
-                        screenController.navigate(new WinningScreen(navigateToMenu, winner, player1Ship.getImage(), player2Ship.getImage()));
+                        screenController.navigate(new WinningScreen(scene, navigateToMenu, winner, player1Ship.getImage(), player2Ship.getImage()));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -268,12 +396,27 @@ public class GameTimer extends AnimationTimer {
     public void handle(long currentNanoTime) {
         gc.setFont(Font.font("Orbitron", 20));
         long currentSecond = (System.nanoTime() - this.startTime) / 1_000_000_000; // Calculate elapsed seconds
+        double deltaTime = (currentNanoTime - lastNanoTime) / 1_000_000_000.0; // Time in seconds
+        lastNanoTime = currentNanoTime;
 
         // Clear the canvas for rendering
         gc.clearRect(0, 0, GameProper.WINDOW_WIDTH, GameProper.WINDOW_HEIGHT);
 
         // Render walls
         renderWalls();
+
+        // Spawn power-ups
+        spawnPowerUp();
+
+        updatePowerUps(deltaTime);
+
+        // Check collisions with power-ups
+        checkPowerUpCollisions(player1Ship);
+        checkPowerUpCollisions(player2Ship);
+        checkWallCollsions();
+
+        // Update active power-ups
+        updateActivePowerUps(deltaTime);
 
         // Handle ship collision with walls
         checkShipCollision(player1Ship);
@@ -296,9 +439,9 @@ public class GameTimer extends AnimationTimer {
         player2Ship.render(gc);
 
         // Render health bars
-        renderHealthBar(player1Ship, 20, 20, 100);
+        renderHealthBar(player1Ship, 20,20, 100);
         renderHealthBar(player2Ship, GameProper.WINDOW_WIDTH - 120, 20, 100);
-        gc.strokeText(currentSecond / 60 + " : " + ((currentSecond % 59 < 10) ? "0" : "") + currentSecond % 59, (GameProper.WINDOW_WIDTH / 2) - 22, 45); // Time display
+        gc.strokeText(currentSecond / 60 + " : " + ((currentSecond % 59 < 10) ? "0" : "") + currentSecond % 59, GameProper.WINDOW_WIDTH / 2, 20); // Time display
 
         checkWinner();
     }
