@@ -13,8 +13,7 @@ public class Projectile extends Sprite implements Runnable {
     private final String projectileName; // Name of the projectile (e.g., for identification)
     private boolean playing;             // Indicates if the projectile is still active
     public Rectangle2D hitbox;           // Represents the projectile's hitbox for collision detection
-
-    private final int PROJECTILE_SPEED = 8; // Speed at which the projectile moves
+    private int projectileSpeed; // Speed at which the projectile moves
 
     /**
      * Constructor to initialize the projectile with its attributes.
@@ -25,11 +24,12 @@ public class Projectile extends Sprite implements Runnable {
      * @param rotation         The initial rotation angle (in degrees)
      * @param PROJECTILE_IMAGE The image representing the projectile
      */
-    public Projectile(String name, double x, double y, double rotation, Image PROJECTILE_IMAGE) {
+    public Projectile(String name, double x, double y, double rotation, int projectileSpeed, Image PROJECTILE_IMAGE) {
         super(x, y, PROJECTILE_IMAGE); // Initialize the base Sprite class
         this.projectileName = name;
         this.playing = true;          // Mark the projectile as active initially
         this.rotation = rotation;    // Set the initial rotation
+        this.projectileSpeed = projectileSpeed;
         this.hitbox = new Rectangle2D(this.xPos, this.yPos, this.width, this.height); // Initialize the hitbox
     }
 

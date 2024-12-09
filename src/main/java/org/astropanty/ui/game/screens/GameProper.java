@@ -6,6 +6,7 @@ import java.util.List;
 import org.astropanty.App;
 import org.astropanty.data.MapLayouts;
 import org.astropanty.data.ShipImageRepository;
+import org.astropanty.data.ShipRepository;
 import org.astropanty.ui.game.entities.Ship;
 import org.astropanty.ui.game.entities.Wall;
 import org.astropanty.ui.game.logic.GameTimer;
@@ -42,6 +43,7 @@ public class GameProper implements Screen {
         this.navigateToMenu = navigateToMenu;
     }
 
+
     @Override
     public Scene content() {
         this.root = new Group();
@@ -51,17 +53,28 @@ public class GameProper implements Screen {
 
         GraphicsContext gc = this.canvas.getGraphicsContext2D();
 
+        // Fetch player 1 and player 2 attributes
+        ShipRepository.ShipAttributes player1Attributes = ShipRepository.getShipAttributes(player1ShipId);
+        ShipRepository.ShipAttributes player2Attributes = ShipRepository.getShipAttributes(player2ShipId);
+
         Ship player1Ship = new Ship(50, WINDOW_HEIGHT / 2, "Player 1",
-                new Image(ShipImageRepository.getShipImagePath(player1ShipId), 33, 42, false, false));
+                new Image(player1Attributes.getShipImagePath(), 33, 42, false, false),
+                player1Attributes.getShipSpeed(), player1Attributes.getBulletSpeed(),
+                player1Attributes.getBulletImagePath());
+
         Ship player2Ship = new Ship(WINDOW_WIDTH - 100, WINDOW_HEIGHT / 2, "Player 2",
-                new Image(ShipImageRepository.getShipImagePath(player2ShipId), 33, 42, false, false));
+                new Image(player2Attributes.getShipImagePath(), 33, 42, false, false),
+                player2Attributes.getShipSpeed(), player2Attributes.getBulletSpeed(),
+                player2Attributes.getBulletImagePath());
 
         List<Wall> selectedMap = (mapId == 1) ? MapLayouts.getMap1Wall() : MapLayouts.getMap2Walls();
 
-        GameTimer gameTimer = new GameTimer(gc, scene, player1Ship, player2Ship,selectedMap, navigateToMenu, screenController);
+        GameTimer gameTimer = new GameTimer(gc, scene, player1Ship, player2Ship, selectedMap, navigateToMenu, screenController);
         gameTimer.start();
         gameTimer.startRace();
 
         return this.scene;
     }
 }
+
+

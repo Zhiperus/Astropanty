@@ -19,11 +19,12 @@ public class Ship extends Sprite implements Runnable {
     private final List<Projectile> projectiles; // List of active projectiles fired by the ship
     private final Image bulletImage;           // Image used for the ship's projectiles
 
+    private int bulletSpeed;
     public int bulletsLeft; // Number of bullets left before a reload is required
     public long lastShot;   // Timestamp of the last shot fired
     public Rectangle2D hitbox; // Ship's hitbox for collision detection
 
-    private final int MOVEMENT_SPEED = 3; // Speed of the ship's forward movement
+    private int movementSpeed; // Speed of the ship's forward movement
     private final int ROTATION_SPEED = 3; // Speed of the ship's rotation
 
     /**
@@ -34,16 +35,20 @@ public class Ship extends Sprite implements Runnable {
      * @param name      Name of the ship (e.g., "Player1")
      * @param SHIP_IMAGE Image representing the ship
      */
-    public Ship(int x, int y, String name, Image SHIP_IMAGE) {
+    public Ship(int x, int y, String name, Image SHIP_IMAGE, int speed, int bulletSpeed, String bulletImagePath) {
         super(x, y, SHIP_IMAGE);
         this.playing = true; // Set the ship as active
         this.name = name;
         this.health = 100; // Default health value
+        this.movementSpeed = speed;
+
         this.projectiles = new ArrayList<>(); // Initialize projectile list
+        this.bulletSpeed = bulletSpeed;
         this.bulletImage = new Image(
-                getClass().getResource("/org/astropanty/bullet.png").toExternalForm(),
+                bulletImagePath,
                 10, 10, false, false); // Load the projectile image
         this.bulletsLeft = 5; // Initial bullets
+
         this.lastShot = 0; // Initialize last shot timestamp
         this.hitbox = new Rectangle2D(this.xPos, this.yPos, this.width, this.height); // Initialize hitbox
     }
@@ -58,6 +63,7 @@ public class Ship extends Sprite implements Runnable {
                 this.xPos + 13, // Offset to position the bullet correctly
                 this.yPos + 13,
                 this.rotation,
+                this.bulletSpeed,
                 this.bulletImage);
         projectiles.add(bullet); // Add the bullet to the active projectiles list
 
@@ -129,8 +135,8 @@ public class Ship extends Sprite implements Runnable {
      */
     public void forward() {
         if (playing){
-            this.setXPos(this.getXPos() + Math.sin(Math.toRadians(this.getRotation())) * MOVEMENT_SPEED);
-            this.setYPos(this.getYPos() - Math.cos(Math.toRadians(this.getRotation())) * MOVEMENT_SPEED);
+            this.setXPos(this.getXPos() + Math.sin(Math.toRadians(this.getRotation())) * movementSpeed);
+            this.setYPos(this.getYPos() - Math.cos(Math.toRadians(this.getRotation())) * movementSpeed);
         }
     }
 
