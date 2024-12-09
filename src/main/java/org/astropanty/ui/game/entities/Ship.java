@@ -34,7 +34,7 @@ public class Ship extends Sprite implements Runnable {
      * @param name      Name of the ship (e.g., "Player1")
      * @param SHIP_IMAGE Image representing the ship
      */
-    public Ship(int x, int y, String name, Image SHIP_IMAGE) {
+    public Ship(double x, double y, String name, Image SHIP_IMAGE) {
         super(x, y, SHIP_IMAGE);
         this.playing = true; // Set the ship as active
         this.name = name;
@@ -156,11 +156,11 @@ public class Ship extends Sprite implements Runnable {
 
             // Implement screen wrapping logic
             if (this.xPos > GameProper.WINDOW_WIDTH) {
-                this.setXPos(0); // Wrap to the left
+                this.setXPos(-50); // Wrap to the left
             } else if (this.xPos < -50) {
                 this.setXPos(GameProper.WINDOW_WIDTH); // Wrap to the right
             } else if (this.yPos > GameProper.WINDOW_HEIGHT) {
-                this.setYPos(0); // Wrap to the top
+                this.setYPos(-50); // Wrap to the top
             } else if (this.yPos < -50) {
                 this.setYPos(GameProper.WINDOW_HEIGHT); // Wrap to the bottom
             }

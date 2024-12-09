@@ -296,9 +296,9 @@ public class GameTimer extends AnimationTimer {
         player2Ship.render(gc);
 
         // Render health bars
-        renderHealthBar(player1Ship, 20, 0, 100);
-        renderHealthBar(player2Ship, GameProper.WINDOW_WIDTH - 120, 0, 100);
-        gc.strokeText(currentSecond / 60 + " : " + ((currentSecond % 59 < 10) ? "0" : "") + currentSecond % 59, GameProper.WINDOW_WIDTH / 2, 20); // Time display
+        renderHealthBar(player1Ship, 20, 20, 100);
+        renderHealthBar(player2Ship, GameProper.WINDOW_WIDTH - 120, 20, 100);
+        gc.strokeText(currentSecond / 60 + " : " + ((currentSecond % 59 < 10) ? "0" : "") + currentSecond % 59, (GameProper.WINDOW_WIDTH / 2) - 22, 45); // Time display
 
         checkWinner();
     }
