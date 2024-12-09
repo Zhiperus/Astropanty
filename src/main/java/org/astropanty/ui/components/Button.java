@@ -4,6 +4,8 @@ public class Button extends javafx.scene.control.Button {
     public Button(String text, Runnable action) {
         super(text); // Set the button text
 
+        setFocusTraversable(false); // Prevent focus for key activation
+
         // Default style for the button
         setStyle("-fx-font-size: 18px; -fx-font-family: 'Orbitron'; "
                 + "-fx-background-color: #444; -fx-text-fill: white; -fx-background-radius: 10;");

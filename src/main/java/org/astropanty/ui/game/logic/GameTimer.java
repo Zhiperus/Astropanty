@@ -23,6 +23,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
@@ -126,6 +127,19 @@ public class GameTimer extends AnimationTimer {
         }
     }
 
+    private void checkWallCollsions(){
+        Iterator<PowerUp> iterator = powerUps.iterator();
+        while (iterator.hasNext()){
+            PowerUp powerUp = iterator.next();
+            for (Wall wall: walls){
+                if (wall.checkCollision(powerUp.getHitbox())){
+                    iterator.remove();
+                    break;
+                }
+            }
+        }
+    }
+
     /**
      * Render all walls.
      */
@@ -151,13 +165,13 @@ public class GameTimer extends AnimationTimer {
             Image icon;
             switch (randomType) {
                 case SPEED:
-                    icon = new Image(getClass().getResource("/org/astropanty/speed_icon.png").toExternalForm());
+                    icon = new Image(getClass().getResource("/org/astropanty/speed_icon.png").toExternalForm(),50, 50, false ,false);
                     break;
                 case DAMAGE:
-                    icon = new Image(getClass().getResource("/org/astropanty/damage_icon.png").toExternalForm());
+                    icon = new Image(getClass().getResource("/org/astropanty/damage_icon.png").toExternalForm(),50, 50, false ,false);
                     break;
                 case HEALTH:
-                    icon = new Image(getClass().getResource("/org/astropanty/health_icon.png").toExternalForm());
+                    icon = new Image(getClass().getResource("/org/astropanty/health_icon.png").toExternalForm(),50, 50, false ,false);
                     break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + randomType);
@@ -355,9 +369,9 @@ public class GameTimer extends AnimationTimer {
                 try {
                     Thread.sleep(2000); // Delay for displaying winner
                     if(!winner.equals("Draw!"))
-                        screenController.navigate(new WinningScreen(navigateToMenu, winner, player1Ship.getShipName() == winner ? player1Ship.getImage() : player2Ship.getImage(), null));
+                        screenController.navigate(new WinningScreen(scene, navigateToMenu, winner, player1Ship.getShipName() == winner ? player1Ship.getImage() : player2Ship.getImage(), null));
                     else
-                        screenController.navigate(new WinningScreen(navigateToMenu, winner, player1Ship.getImage(), player2Ship.getImage()));
+                        screenController.navigate(new WinningScreen(scene, navigateToMenu, winner, player1Ship.getImage(), player2Ship.getImage()));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -399,6 +413,7 @@ public class GameTimer extends AnimationTimer {
         // Check collisions with power-ups
         checkPowerUpCollisions(player1Ship);
         checkPowerUpCollisions(player2Ship);
+        checkWallCollsions();
 
         // Update active power-ups
         updateActivePowerUps(deltaTime);
@@ -424,8 +439,8 @@ public class GameTimer extends AnimationTimer {
         player2Ship.render(gc);
 
         // Render health bars
-        renderHealthBar(player1Ship, 20, 0, 100);
-        renderHealthBar(player2Ship, GameProper.WINDOW_WIDTH - 120, 0, 100);
+        renderHealthBar(player1Ship, 20,20, 100);
+        renderHealthBar(player2Ship, GameProper.WINDOW_WIDTH - 120, 20, 100);
         gc.strokeText(currentSecond / 60 + " : " + ((currentSecond % 59 < 10) ? "0" : "") + currentSecond % 59, GameProper.WINDOW_WIDTH / 2, 20); // Time display
 
         checkWinner();
