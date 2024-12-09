@@ -9,8 +9,11 @@ import org.astropanty.ui.game.entities.Projectile;
 import org.astropanty.ui.game.entities.Ship;
 import org.astropanty.ui.game.entities.Wall;
 import org.astropanty.ui.game.screens.GameProper;
+import org.astropanty.ui.game.screens.WinningScreen;
+import org.astropanty.ui.navigation.ScreenController;
 
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
@@ -31,11 +34,16 @@ public class GameTimer extends AnimationTimer {
     private final Thread player2Thread; // Thread for player 2's ship logic
     private final List<Wall> walls; // list of wall entities for selected map
     private final Set<KeyCode> activeKeys = new HashSet<>(); // Tracks currently pressed keys
+    private final long startTime;
+
+    private final ScreenController screenController;
+    private final Runnable navigateToMenu;
 
     /**
      * Constructor for initializing the GameTimer with necessary dependencies.
      */
-    public GameTimer(GraphicsContext gc, Scene scene, Ship player1Ship, Ship player2Ship, List<Wall> walls) {
+    public GameTimer(GraphicsContext gc, Scene scene, Ship player1Ship, Ship player2Ship, List<Wall> walls, Runnable navigateToMenu, ScreenController screenController) {
+        this.startTime = System.nanoTime(); // Store the start time in nanoseconds
         this.gc = gc;
         this.scene = scene;
         this.player1Ship = player1Ship;
@@ -48,6 +56,9 @@ public class GameTimer extends AnimationTimer {
 
         // Initialize key press and release event handlers
         this.setupKeyHandlers();
+
+        this.screenController = screenController;
+        this.navigateToMenu = navigateToMenu;
     }
 
     /**
@@ -167,7 +178,6 @@ public class GameTimer extends AnimationTimer {
         // Display reload countdown
         if (bulletsLeft == 0) {
             long reloadTimeLeft = ((RELOAD_PERIOD - (currentTime - lastShootTime)) / 1_000_000_000L) + 1;
-            gc.setFont(Font.font("Orbitron", 20));
             gc.setStroke(Color.WHITE);
             gc.strokeText(
                 "Reloading in " + reloadTimeLeft,
@@ -203,6 +213,44 @@ public class GameTimer extends AnimationTimer {
         }
     }
 
+    // Checks if a winner should be declared (if any kart has finished or time exceeds 120 seconds)
+    public void checkWinner() {
+        if (!this.player1Thread.isAlive() || !this.player2Thread.isAlive() || (System.nanoTime() - this.startTime) / 1_000_000_000 > 119) { // If race time exceeds 120 seconds
+            this.stop();           // Stop the AnimationTimer (game loop)
+            player1Ship.stop();         // Stop the karts and pedestrians
+            player2Ship.stop();
+
+            // Determine the winner based on remaining lives
+            String winner;
+            if (player1Ship.getHealth() > player2Ship.getHealth()) {
+                gc.setFill(Color.RED); // Set color for myKart winner
+                winner = player1Ship.getShipName();
+            }else if (player2Ship.getHealth() > player1Ship.getHealth()) {
+                gc.setFill(Color.RED); // Set color for myKart winner
+                winner = player2Ship.getShipName();
+            }else {
+            	gc.setFill(Color.BLUE); // Set color for yourKart winner
+                winner = "Draw!";
+            }
+
+            // Interrupt all threads (stop them immediately)
+            player1Thread.interrupt();
+            player2Thread.interrupt();
+
+            Platform.runLater(() -> {
+                try {
+                    Thread.sleep(2000); // Delay for displaying winner
+                    if(!winner.equals("Draw!"))
+                        screenController.navigate(new WinningScreen(navigateToMenu, winner, player1Ship.getShipName() == winner ? player1Ship.getImage() : player2Ship.getImage(), null));
+                    else
+                        screenController.navigate(new WinningScreen(navigateToMenu, winner, player1Ship.getImage(), player2Ship.getImage()));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+    }
+
      /**
      * Renders a health bar for a given ship.
      */
@@ -218,6 +266,9 @@ public class GameTimer extends AnimationTimer {
      */
     @Override
     public void handle(long currentNanoTime) {
+        gc.setFont(Font.font("Orbitron", 20));
+        long currentSecond = (System.nanoTime() - this.startTime) / 1_000_000_000; // Calculate elapsed seconds
+
         // Clear the canvas for rendering
         gc.clearRect(0, 0, GameProper.WINDOW_WIDTH, GameProper.WINDOW_HEIGHT);
 
@@ -247,5 +298,8 @@ public class GameTimer extends AnimationTimer {
         // Render health bars
         renderHealthBar(player1Ship, 20, 0, 100);
         renderHealthBar(player2Ship, GameProper.WINDOW_WIDTH - 120, 0, 100);
+        gc.strokeText(currentSecond / 60 + " : " + ((currentSecond % 59 < 10) ? "0" : "") + currentSecond % 59, GameProper.WINDOW_WIDTH / 2, 20); // Time display
+
+        checkWinner();
     }
 }
