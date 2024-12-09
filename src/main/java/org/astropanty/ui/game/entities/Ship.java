@@ -38,7 +38,7 @@ public class Ship extends Sprite implements Runnable {
      * @param name      Name of the ship (e.g., "Player1")
      * @param SHIP_IMAGE Image representing the ship
      */
-    public Ship(int x, int y, String name, Image SHIP_IMAGE, int speed, int bulletSpeed, int bulletDamage, String bulletImagePath) {
+    public Ship(double x, double y, String name, Image SHIP_IMAGE, int speed, int bulletSpeed, int bulletDamage, String bulletImagePath) {
         super(x, y, SHIP_IMAGE);
         this.playing = true; // Set the ship as active
         this.name = name;

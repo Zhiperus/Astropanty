@@ -56,12 +56,12 @@ public class GameProper implements Screen {
         ShipRepository.ShipAttributes player1Attributes = ShipRepository.getShipAttributes(player1ShipId);
         ShipRepository.ShipAttributes player2Attributes = ShipRepository.getShipAttributes(player2ShipId);
 
-        Ship player1Ship = new Ship(50, WINDOW_HEIGHT / 2, "Player 1",
+        Ship player1Ship = new Ship(WINDOW_WIDTH*0.10, WINDOW_HEIGHT*0.20, "Player 1",
                 new Image(player1Attributes.getShipImagePath(), 33, 42, false, false),
                 player1Attributes.getShipSpeed(), player1Attributes.getBulletSpeed(), player1Attributes.getBulletDamage(),
                 player1Attributes.getBulletImagePath());
 
-        Ship player2Ship = new Ship(WINDOW_WIDTH - 100, WINDOW_HEIGHT / 2, "Player 2",
+        Ship player2Ship = new Ship(WINDOW_WIDTH*0.85, WINDOW_HEIGHT*0.80, "Player 2",
                 new Image(player2Attributes.getShipImagePath(), 33, 42, false, false),
                 player2Attributes.getShipSpeed(), player2Attributes.getBulletSpeed(), player2Attributes.getBulletDamage(),
                 player2Attributes.getBulletImagePath());
