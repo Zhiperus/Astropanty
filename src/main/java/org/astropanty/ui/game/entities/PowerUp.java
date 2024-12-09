@@ -1,7 +1,5 @@
 package org.astropanty.ui.game.entities;
 
-import java.time.Duration;
-
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 

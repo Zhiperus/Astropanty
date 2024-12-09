@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.astropanty.App;
 import org.astropanty.data.MapLayouts;
-import org.astropanty.data.ShipImageRepository;
 import org.astropanty.data.ShipRepository;
 import org.astropanty.ui.game.entities.Ship;
 import org.astropanty.ui.game.entities.Wall;
