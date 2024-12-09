@@ -68,7 +68,7 @@ public class PowerUp extends Sprite{
 
         switch (type) {
             case SPEED:
-                ship.increaseSpeed(5);; // Example: Temporarily increase speed
+                ship.increaseSpeed(2);; // Example: Temporarily increase speed
                 break;
             case DAMAGE:
                 ship.increaseDamage(10); // Example: Temporarily increase damage
