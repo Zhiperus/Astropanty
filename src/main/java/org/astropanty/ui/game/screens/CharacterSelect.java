@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import org.astropanty.data.ShipImageRepository;
+import org.astropanty.data.ShipRepository;
 import org.astropanty.ui.components.Button;
 import org.astropanty.ui.navigation.Screen;
 
@@ -60,7 +60,7 @@ public class CharacterSelect implements Screen {
         HBox shipButtons = new HBox(20);
         shipButtons.setAlignment(Pos.CENTER);
 
-        List<String> shipImages = ShipImageRepository.getAllShipImages();
+        List<String> shipImages = ShipRepository.getAllShipImages();
         for (int i = 0; i < shipImages.size(); i++) {
             int shipId = i;
             String shipImagePath = shipImages.get(shipId);

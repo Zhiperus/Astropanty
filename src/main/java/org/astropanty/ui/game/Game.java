@@ -5,7 +5,6 @@ import org.astropanty.ui.game.screens.GameProper;
 import org.astropanty.ui.navigation.Screen;
 import org.astropanty.ui.navigation.ScreenController;
 import org.astropanty.ui.game.screens.MapSelectScreen;
-import org.astropanty.ui.game.screens.WinningScreen;
 
 import javafx.scene.Scene;
 
