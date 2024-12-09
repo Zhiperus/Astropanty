@@ -68,7 +68,7 @@ public class MapLayouts {
     }
 
     /**
-     * Returns wall entities for Map 2 (Funky Cubes) with random cube wall placement within a smaller area (40% of original ratio).
+     * Returns wall entities for Map 2 (Funky Cubes) with random cube wall placement within a smaller area.
      */
     public static List<Wall> getMap2Walls() {
         List<Wall> walls = new ArrayList<>();

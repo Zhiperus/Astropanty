@@ -23,7 +23,6 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
@@ -441,7 +440,7 @@ public class GameTimer extends AnimationTimer {
         // Render health bars
         renderHealthBar(player1Ship, 20,20, 100);
         renderHealthBar(player2Ship, GameProper.WINDOW_WIDTH - 120, 20, 100);
-        gc.strokeText(currentSecond / 60 + " : " + ((currentSecond % 59 < 10) ? "0" : "") + currentSecond % 59, GameProper.WINDOW_WIDTH / 2, 20); // Time display
+        gc.strokeText(currentSecond / 60 + " : " + ((currentSecond % 59 < 10) ? "0" : "") + currentSecond % 59, (GameProper.WINDOW_WIDTH / 2) - 22, 45); // Time display
 
         checkWinner();
     }

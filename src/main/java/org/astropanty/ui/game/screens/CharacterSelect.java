@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import org.astropanty.data.ShipImageRepository;
 import org.astropanty.data.ShipRepository;
 import org.astropanty.ui.components.Button;
 import org.astropanty.ui.navigation.Screen;
