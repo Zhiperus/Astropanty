@@ -51,9 +51,9 @@ public class GameProper implements Screen {
 
         GraphicsContext gc = this.canvas.getGraphicsContext2D();
 
-        Ship player1Ship = new Ship(100, WINDOW_HEIGHT / 2, "Player 1",
+        Ship player1Ship = new Ship((WINDOW_WIDTH*0.1), (WINDOW_HEIGHT*0.12), "Player 1",
                 new Image(ShipImageRepository.getShipImagePath(player1ShipId), 33, 42, false, false));
-        Ship player2Ship = new Ship(WINDOW_WIDTH - 200, WINDOW_HEIGHT / 2, "Player 2",
+        Ship player2Ship = new Ship((WINDOW_WIDTH*0.85), (WINDOW_HEIGHT*0.80), "Player 2",
                 new Image(ShipImageRepository.getShipImagePath(player2ShipId), 33, 42, false, false));
 
         List<Wall> selectedMap = (mapId == 1) ? MapLayouts.getMap1Wall() : MapLayouts.getMap2Walls();

@@ -29,11 +29,11 @@ public class MapSelectScreen implements Screen{
         title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-fill: white;");
 
         // Map 1 Button
-        Button map1Button = new Button("Map 1", () -> handleMapSelection(1));
+        Button map1Button = new Button("The Wrap", () -> handleMapSelection(1));
         map1Button.setPrefSize(200, 50);
 
         // Map 2 Button
-        Button map2Button = new Button("Map 2", () -> handleMapSelection(2));
+        Button map2Button = new Button("Funky Cubes", () -> handleMapSelection(2));
         map2Button.setPrefSize(200, 50);
 
         // Navigation Buttons
