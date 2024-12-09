@@ -19,7 +19,10 @@ public class Ship extends Sprite implements Runnable {
     private final List<Projectile> projectiles; // List of active projectiles fired by the ship
     private final Image bulletImage;           // Image used for the ship's projectiles
 
+    private int defaultMovementSpeed;
+    private int defaultBulletDamage;
     private int bulletSpeed;
+    private int bulletDamage;
     public int bulletsLeft; // Number of bullets left before a reload is required
     public long lastShot;   // Timestamp of the last shot fired
     public Rectangle2D hitbox; // Ship's hitbox for collision detection
@@ -35,7 +38,7 @@ public class Ship extends Sprite implements Runnable {
      * @param name      Name of the ship (e.g., "Player1")
      * @param SHIP_IMAGE Image representing the ship
      */
-    public Ship(int x, int y, String name, Image SHIP_IMAGE, int speed, int bulletSpeed, String bulletImagePath) {
+    public Ship(int x, int y, String name, Image SHIP_IMAGE, int speed, int bulletSpeed, int bulletDamage, String bulletImagePath) {
         super(x, y, SHIP_IMAGE);
         this.playing = true; // Set the ship as active
         this.name = name;
@@ -44,6 +47,7 @@ public class Ship extends Sprite implements Runnable {
 
         this.projectiles = new ArrayList<>(); // Initialize projectile list
         this.bulletSpeed = bulletSpeed;
+        this.bulletDamage = bulletDamage;
         this.bulletImage = new Image(
                 bulletImagePath,
                 10, 10, false, false); // Load the projectile image
@@ -98,6 +102,37 @@ public class Ship extends Sprite implements Runnable {
     public int getHealth() {
         return this.health;
     }
+
+    public int getBulletDamage() {
+        return this.bulletDamage;
+    }
+
+    public void increaseSpeed(int speed){
+        this.defaultMovementSpeed = movementSpeed;
+        this.movementSpeed += speed;
+    }
+
+    public void increaseDamage(int damage){
+        this.defaultBulletDamage = bulletDamage;
+        this.bulletDamage += damage;
+    }
+
+    
+    public void increaseHealth(int health){
+        if(this.health + health > 100)
+            this.health = 100;
+        else
+            this.health += health;
+    }
+
+    public void resetSpeed(){
+        this.movementSpeed = defaultMovementSpeed;
+    }
+
+    public void resetDamage(){
+        this.bulletDamage = defaultBulletDamage;
+    }
+
 
     /**
      * Reduces the ship's health by the specified damage amount.

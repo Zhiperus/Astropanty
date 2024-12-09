@@ -73,8 +73,8 @@ public class Projectile extends Sprite implements Runnable {
      * The movement is based on trigonometric calculations for the x and y axes.
      */
     public void move() {
-        this.setXPos(this.getXPos() + Math.sin(Math.toRadians(this.getRotation())) * PROJECTILE_SPEED);
-        this.setYPos(this.getYPos() - Math.cos(Math.toRadians(this.getRotation())) * PROJECTILE_SPEED);
+        this.setXPos(this.getXPos() + Math.sin(Math.toRadians(this.getRotation())) * projectileSpeed);
+        this.setYPos(this.getYPos() - Math.cos(Math.toRadians(this.getRotation())) * projectileSpeed);
     }
 
     /**

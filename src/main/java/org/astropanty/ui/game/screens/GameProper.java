@@ -59,12 +59,12 @@ public class GameProper implements Screen {
 
         Ship player1Ship = new Ship(50, WINDOW_HEIGHT / 2, "Player 1",
                 new Image(player1Attributes.getShipImagePath(), 33, 42, false, false),
-                player1Attributes.getShipSpeed(), player1Attributes.getBulletSpeed(),
+                player1Attributes.getShipSpeed(), player1Attributes.getBulletSpeed(), player1Attributes.getBulletDamage(),
                 player1Attributes.getBulletImagePath());
 
         Ship player2Ship = new Ship(WINDOW_WIDTH - 100, WINDOW_HEIGHT / 2, "Player 2",
                 new Image(player2Attributes.getShipImagePath(), 33, 42, false, false),
-                player2Attributes.getShipSpeed(), player2Attributes.getBulletSpeed(),
+                player2Attributes.getShipSpeed(), player2Attributes.getBulletSpeed(), player2Attributes.getBulletDamage(),
                 player2Attributes.getBulletImagePath());
 
         List<Wall> selectedMap = (mapId == 1) ? MapLayouts.getMap1Wall() : MapLayouts.getMap2Walls();
